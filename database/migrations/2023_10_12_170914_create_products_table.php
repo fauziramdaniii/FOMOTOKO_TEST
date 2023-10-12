@@ -13,19 +13,16 @@ return new class extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->text('description');
-            $table->decimal('price', 10, 2);
-            $table->decimal('discounted_price', 10, 2)->nullable();
+            $table->string('nama');
+            $table->decimal('harga', 10, 2); // Kolom harga dengan 2 angka desimal
+            $table->decimal('diskon', 10, 2)->default(0.00); // Kolom diskon default 0.00
+            $table->timestamp('mulai_flash_sale')->nullable(); // Timestamp awal flash sale
+            $table->timestamp('selesai_flash_sale')->nullable(); // Timestamp akhir flash sale
             $table->timestamps();
         });
     }
 
-
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
+    public function down()
     {
         Schema::dropIfExists('products');
     }

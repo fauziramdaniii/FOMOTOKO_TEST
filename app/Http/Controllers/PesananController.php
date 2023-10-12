@@ -3,88 +3,79 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\ItemPesanan;
+use App\Models\Pesanan;
 
-class ItemPesananController extends Controller
+class PesananController extends Controller
 {
-    // Menampilkan semua item pesanan berdasarkan ID pesanan
-    public function index($pesanan_id)
+    // Menampilkan semua pesanan
+    public function index()
     {
-        $itemPesanan = ItemPesanan::where('pesanan_id', $pesanan_id)->get();
-
-        if ($itemPesanan->isEmpty()) {
-            return response()->json(['message' => 'Item pesanan tidak ditemukan'], 404);
-        }
-
-        return response()->json($itemPesanan, 200);
+        $pesanan = Pesanan::all();
+        return response()->json($pesanan, 200);
     }
 
-    // Menambahkan item pesanan baru ke pesanan tertentu
-    public function store(Request $request, $pesanan_id)
+    // Membuat pesanan baru
+    public function store(Request $request)
     {
         $request->validate([
-            'nama_barang' => 'required',
-            'jumlah' => 'required|integer',
+            'nama_pelanggan' => 'required',
+            'alamat_pengiriman' => 'required',
         ]);
 
-        $itemPesanan = new ItemPesanan([
-            'nama_barang' => $request->nama_barang,
-            'jumlah' => $request->jumlah,
-            'pesanan_id' => $pesanan_id,
+        $pesanan = new Pesanan([
+            'nama_pelanggan' => $request->nama_pelanggan,
+            'alamat_pengiriman' => $request->alamat_pengiriman,
         ]);
 
-        $itemPesanan->save();
+        $pesanan->save();
 
-        return response()->json(['message' => 'Item pesanan berhasil ditambahkan'], 201);
+        return response()->json(['message' => 'Pesanan berhasil dibuat'], 201);
     }
 
-    // Menampilkan detail item pesanan berdasarkan ID
-    public function show($pesanan_id, $item_pesanan_id)
+    // Menampilkan detail pesanan berdasarkan ID
+    public function show($id)
     {
-        $itemPesanan = ItemPesanan::where('pesanan_id', $pesanan_id)
-            ->find($item_pesanan_id);
+        $pesanan = Pesanan::find($id);
 
-        if (!$itemPesanan) {
-            return response()->json(['message' => 'Item pesanan tidak ditemukan'], 404);
+        if (!$pesanan) {
+            return response()->json(['message' => 'Pesanan tidak ditemukan'], 404);
         }
 
-        return response()->json($itemPesanan, 200);
+        return response()->json($pesanan, 200);
     }
 
-    // Mengupdate item pesanan berdasarkan ID
-    public function update(Request $request, $pesanan_id, $item_pesanan_id)
+    // Mengupdate pesanan berdasarkan ID
+    public function update(Request $request, $id)
     {
-        $itemPesanan = ItemPesanan::where('pesanan_id', $pesanan_id)
-            ->find($item_pesanan_id);
+        $pesanan = Pesanan::find($id);
 
-        if (!$itemPesanan) {
-            return response()->json(['message' => 'Item pesanan tidak ditemukan'], 404);
+        if (!$pesanan) {
+            return response()->json(['message' => 'Pesanan tidak ditemukan'], 404);
         }
 
         $request->validate([
-            'nama_barang' => 'required',
-            'jumlah' => 'required|integer',
+            'nama_pelanggan' => 'required',
+            'alamat_pengiriman' => 'required',
         ]);
 
-        $itemPesanan->nama_barang = $request->nama_barang;
-        $itemPesanan->jumlah = $request->jumlah;
-        $itemPesanan->save();
+        $pesanan->nama_pelanggan = $request->nama_pelanggan;
+        $pesanan->alamat_pengiriman = $request->alamat_pengiriman;
+        $pesanan->save();
 
-        return response()->json(['message' => 'Item pesanan berhasil diperbarui'], 200);
+        return response()->json(['message' => 'Pesanan berhasil diperbarui'], 200);
     }
 
-    // Menghapus item pesanan berdasarkan ID
-    public function destroy($pesanan_id, $item_pesanan_id)
+    // Menghapus pesanan berdasarkan ID
+    public function destroy($id)
     {
-        $itemPesanan = ItemPesanan::where('pesanan_id', $pesanan_id)
-            ->find($item_pesanan_id);
+        $pesanan = Pesanan::find($id);
 
-        if (!$itemPesanan) {
-            return response()->json(['message' => 'Item pesanan tidak ditemukan'], 404);
+        if (!$pesanan) {
+            return response()->json(['message' => 'Pesanan tidak ditemukan'], 404);
         }
 
-        $itemPesanan->delete();
+        $pesanan->delete();
 
-        return response()->json(['message' => 'Item pesanan berhasil dihapus'], 200);
+        return response()->json(['message' => 'Pesanan berhasil dihapus'], 200);
     }
 }

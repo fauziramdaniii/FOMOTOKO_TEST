@@ -12,7 +12,7 @@ class ItemPesananController extends Controller
     public function index($pesanan_id)
     {
         $itemPesanan = ItemPesanan::where('pesanan_id', $pesanan_id)->get();
-
+        dd($itemPesanan);
         if ($itemPesanan->isEmpty()) {
             return response()->json(['message' => 'Item pesanan tidak ditemukan'], 404);
         }
