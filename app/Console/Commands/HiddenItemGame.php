@@ -25,41 +25,72 @@ class HiddenItemGame extends Command
             "########",
         ];
 
+        // Display the grid
+        $this->info("Hidden Item Game Grid:");
+        foreach ($grid as $line) {
+            $this->info($line);
+        }
+
         // Find the player's starting position (X)
-        for ($y = 0; $y < count($grid); $y++) {
-            if (Str::contains($grid[$y], 'X')) {
-                $playerX = strpos($grid[$y], 'X');
-                $playerY = $y;
-            }
+        $playerX = 1;
+        $playerY = 4;
+
+        // Generate the item location
+        $itemX = rand(1, strlen($grid[0]) - 2);
+        $itemY = rand(1, count($grid) - 2);
+        $grid[$itemY][$itemX] = '$';
+
+        // Display the updated grid
+        $this->info("Hidden Item Game Grid with Item:");
+        foreach ($grid as $line) {
+            $this->info($line);
         }
 
-        // Determine probable item locations
-        $probableItemLocations = [];
-        for ($x = 0; $x < strlen($grid[0]); $x++) {
-            for ($y = 0; $y < count($grid); $y++) {
-                if ($grid[$y][$x] == '.') {
-                    $probableItemLocations[] = [$x, $y];
+        // Game loop for player's movement
+        while (true) {
+            $this->info("Enter a movement command (W, A, S, D) or 'Q' to quit:");
+            $input = strtoupper(trim(fgets(STDIN)));
+
+            if ($input === 'Q') {
+                $this->info("Game Over");
+                break;
+            }
+
+            $newPlayerX = $playerX;
+            $newPlayerY = $playerY;
+
+            if ($input === 'W') {
+                $newPlayerY--;
+            } elseif ($input === 'S') {
+                $newPlayerY++;
+            } elseif ($input === 'A') {
+                $newPlayerX--;
+            } elseif ($input === 'D') {
+                $newPlayerX++;
+            }
+
+            // Check if the new position is valid
+            if ($grid[$newPlayerY][$newPlayerX] === '.') {
+                $grid[$playerY][$playerX] = '.';
+                $grid[$newPlayerY][$newPlayerX] = 'X';
+                $playerX = $newPlayerX;
+                $playerY = $newPlayerY;
+
+                // Display the updated grid
+                $this->info("Updated Grid:");
+                foreach ($grid as $line) {
+                    $this->info($line);
                 }
+
+                // Check if the item is found
+
+            } else 
+                if ($newPlayerX === $itemX && $newPlayerY === $itemY) {
+                $this->info("Congratulations! You found the hidden item at ($itemX, $itemY).");
+                break;
+            } else {
+                $this->info("Invalid move. Try again.");
             }
-        }
-
-        // Randomly select one of the probable item locations
-        if (!empty($probableItemLocations)) {
-            $itemLocation = collect($probableItemLocations)->random();
-            [$itemX, $itemY] = $itemLocation;
-
-            // Mark the grid with the probable item location
-            $grid[$itemY][$itemX] = '$';
-
-            // Display the grid
-            $this->info("Hidden Item Game Grid:");
-            foreach ($grid as $line) {
-                $this->info($line);
-            }
-
-            $this->info("The item is hidden at coordinates ($itemX, $itemY).");
-        } else {
-            $this->info("No probable item locations found.");
         }
     }
 }
