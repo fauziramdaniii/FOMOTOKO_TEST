@@ -13,18 +13,16 @@ class ProductSeeder extends Seeder
         // Tambahkan contoh produk ke database
         Product::create([
             'nama' => 'Produk 1',
-            'harga' => 100.00,
-            'diskon' => 10.00,
-            'mulai_flash_sale' => now(),
-            'selesai_flash_sale' => now()->addHours(4),
+            'harga' => 100000,
+            'stock' => 10,
+            'diskon' => 10,
         ]);
 
         Product::create([
             'nama' => 'Produk 2',
-            'harga' => 80.00,
-            'diskon' => 5.00,
-            'mulai_flash_sale' => now(),
-            'selesai_flash_sale' => now()->addHours(3),
+            'stock' => 5,
+            'harga' => 8000,
+            'diskon' => 5,
         ]);
 
         // Tambahkan produk lain sesuai kebutuhan

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Product;
 use App\Models\FlashSale;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class FlashSaleController extends Controller
 {
@@ -22,6 +23,10 @@ class FlashSaleController extends Controller
         $product = Product::find($request->product_id);
         if ($product->flashSale) {
             return response()->json(['message' => 'Produk sudah dalam flash sale'], 422);
+        }
+
+        if ($product->stock < 1) {
+            return response()->json(['message' => 'Stock Produk Habis'], 422);
         }
 
         // Buat flash sale baru

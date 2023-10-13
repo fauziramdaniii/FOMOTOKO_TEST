@@ -16,8 +16,7 @@ return new class extends Migration
             $table->string('nama');
             $table->decimal('harga', 10, 2); // Kolom harga dengan 2 angka desimal
             $table->decimal('diskon', 10, 2)->default(0.00); // Kolom diskon default 0.00
-            $table->timestamp('mulai_flash_sale')->nullable(); // Timestamp awal flash sale
-            $table->timestamp('selesai_flash_sale')->nullable(); // Timestamp akhir flash sale
+            $table->integer('stock');
             $table->timestamps();
         });
     }
